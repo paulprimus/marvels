@@ -1,11 +1,12 @@
 use std::path::Path;
 
 fn main() {
-
-    let src = Path::new("./src");
+    // unsafe { std::env::set_var("PROTOC", "C:/javadev/tools/protoc/bin/protoc"); }
+    let src = Path::new("./src/");
 
     let mut config = prost_build::Config::new();
+    config.protoc_executable("C:/javadev/tools/protoc/bin/protoc");
     config.btree_map(["."]);
-    prost_build::compile_protos(&["proto/authentication.proto"], &[src]).expect("Failed to compile protos");
+    prost_build::compile_protos(&["./proto/authentication.proto"], &[src]).expect("Failed to compile protos");
 
 }
