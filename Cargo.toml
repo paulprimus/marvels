@@ -2,6 +2,7 @@
 name = "marvels"
 version = "0.1.0"
 edition = "2024"
+authors = ["Paul Pacher <paul.pacher@gmail.com>"]
 
 [dependencies]
 tokio = { version = "1", features = ["full"] }

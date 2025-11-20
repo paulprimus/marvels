@@ -1,14 +1,14 @@
-use axum::{Json, Router};
 use axum::http::StatusCode;
 use axum::routing::{get, post};
-use serde_derive::{Deserialize, Serialize};
+use axum::{Json, Router};
 use log::info;
-use serde_json::{json, Value};
+use serde_derive::{Deserialize, Serialize};
+use serde_json::{Value, json};
+
+mod security;
 
 #[tokio::main]
 async fn main() {
-
-
     tracing_subscriber::fmt::init();
 
     // build our application with a route
@@ -17,9 +17,7 @@ async fn main() {
         .route("/", get(root))
         // `POST /users` goes to `create_user`
         .route("/users", post(create_user))
-        .route("/health", get(health_check))
-        ;
-
+        .route("/health", get(health_check));
 
     info!("Listening on http://0.0.0.0:3000");
     // run our app with hyper, listening globally on port 3000
@@ -30,8 +28,6 @@ async fn main() {
 async fn root() -> &'static str {
     "Hello, World!"
 }
-
-
 
 async fn create_user(
     // this argument tells axum to parse the request body
