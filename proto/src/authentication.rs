@@ -1,12 +1,11 @@
 mod security {
 
-    include!(concat!(env!("OUT_DIR"), "/security.rs"));
+    include!(concat!(env!("OUT_DIR"), "\\authentication"));
 }
 
-use security;
 
-use crate::security;
-pub fn test() -> Result<(), std::error::Error> {
+
+pub fn test() -> Result<(), marvel_error::error::MarvelError> {
     let v = security::LoginRequest {
         userid: "user1".to_string(),
         pwd: "pass".to_string(),

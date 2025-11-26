@@ -3,9 +3,7 @@ use axum::routing::{get, post};
 use axum::{Json, Router};
 use log::info;
 use serde_derive::{Deserialize, Serialize};
-use serde_json::{Value, json};
-
-mod security;
+use serde_json::{json, Value};
 
 #[tokio::main]
 async fn main() {
