@@ -1,26 +1,31 @@
+
 use axum::http::StatusCode;
 use axum::routing::{get, post};
 use axum::{Json, Router};
 use log::info;
 use serde_derive::{Deserialize, Serialize};
 use serde_json::{json, Value};
-
+use proto::{authentication};
+use marvel_error::error::MarvelError;
 #[tokio::main]
-async fn main() {
+async fn main() -> Result<(), MarvelError> {
     tracing_subscriber::fmt::init();
-
+    let r = authentication::build_payload()?;
+    dbg!("{}",&r);
+    let v = authentication::serialize_payload(&r);
+    dbg!("{}",v);
     // build our application with a route
     let app = Router::new()
         // `GET /` goes to `root`
         .route("/", get(root))
         // `POST /users` goes to `create_user`
-        .route("/users", post(create_user))
+        .route("/authenticate", post(create_user))
         .route("/health", get(health_check));
 
     info!("Listening on http://0.0.0.0:3000");
     // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
-    axum::serve(listener, app).await.unwrap();
+    axum::serve(listener, app).await.map_err(|_err| MarvelError::AxumError("Axum Server konnte nicht gestartet werden".to_string()))
 }
 
 async fn root() -> &'static str {

@@ -1,9 +1,0 @@
-
-syntax = "proto3";
-
-package security;
-
-message LoginRequest {
-  string userid = 1;
-  string pwd = 2;
-}

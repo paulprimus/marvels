@@ -1,0 +1,17 @@
+
+syntax = "proto3";
+
+package security;
+
+message LoginPayload {
+  string userid = 1;
+  string pwd = 2;
+}
+
+message LoginResponse {
+    string status = 1;
+}
+
+service Authentication {
+    rpc LoginRequest (LoginPayload) returns (LoginResponse);
+}

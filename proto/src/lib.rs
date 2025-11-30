@@ -1,3 +1,3 @@
-mod authentication;
+pub mod authentication;
 
-pub use authentication::security;
+

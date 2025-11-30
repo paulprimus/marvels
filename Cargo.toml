@@ -13,11 +13,11 @@ serde_json = "1"
 serde_derive = "1"
 log = "0.4.28"
 
-
-
+proto = {path = "proto"}
+marvel_error = {path = "marvel_error"}
 
 [workspace]
-members = [
+members = ["client",
     "marvel_error",
     "proto"
 ]
