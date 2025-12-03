@@ -5,19 +5,12 @@ edition = "2024"
 authors = ["Paul Pacher <paul.pacher@gmail.com>"]
 
 [dependencies]
-tokio = { version = "1", features = ["full"] }
-axum = "0"
-tracing-subscriber = "0"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-serde_derive = "1"
-log = "0.4.28"
 
-proto = {path = "proto"}
-marvel_error = {path = "marvel_error"}
 
 [workspace]
-members = ["client",
-    "marvel_error",
-    "proto"
+members = [
+    "cli",
+    "client",
+    "proto",
+    "server"
 ]

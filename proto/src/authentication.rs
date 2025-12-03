@@ -1,21 +1,29 @@
 use prost::Message;
-pub mod security {
+// pub mod security {
+//
+//     include!(concat!(env!("OUT_DIR"), "/security.rs"));
+// }
 
-    include!(concat!(env!("OUT_DIR"), "/security.rs"));
+#[derive(Clone, PartialEq, Message)]
+pub struct LoginPayload {
+    #[prost(string, tag="1")]
+    pub userid: String,
+    #[prost(string, tag="2")]
+    pub  pwd: String,
 }
 
-pub fn build_payload() -> Result<security::LoginPayload, marvel_error::error::MarvelError> {
-    let v = security::LoginPayload {
-        userid: "user1".to_string(),
-        pwd: "pass".to_string(),
-    };
-    Ok(v)
-}
-
-pub fn serialize_payload(login_payload: &security::LoginPayload) -> Vec<u8> {
-    let mut buf = Vec::new();
-    buf.reserve(login_payload.encoded_len());
-
-    login_payload.encode(&mut buf).unwrap();
-    buf
-}
+// pub fn build_payload() -> Result<security::LoginPayload, marvel_error::error::MarvelError> {
+//     let v = security::LoginPayload {
+//         userid: "user1".to_string(),
+//         pwd: "pass".to_string(),
+//     };
+//     Ok(v)
+// }
+//
+// pub fn serialize_payload(login_payload: &security::LoginPayload) -> Vec<u8> {
+//     let mut buf = Vec::new();
+//     buf.reserve(login_payload.encoded_len());
+//
+//     login_payload.encode(&mut buf).unwrap();
+//     buf
+// }

@@ -7,7 +7,7 @@ edition = "2024"
 prost = "0"
 prost-types = "0"
 
-marvel_error = { path = "../marvel_error" }
+#marvel_error = { path = "../marvel_error" }
 
 [build-dependencies]
 prost-build = "0"
