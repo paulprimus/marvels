@@ -7,4 +7,4 @@ edition = "2024"
 clap = { version = "4", features = ["derive"] }
 server = { path = "../server" }
 client = { path = "../client" }
-
+core = { path = "../core" }

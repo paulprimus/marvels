@@ -1,6 +1,6 @@
 use clap::Parser;
 use server;
-use server::server::MarvelError;
+use core::MarvelError;
 
 mod cli;
 
@@ -14,8 +14,8 @@ fn main() -> Result<(), MarvelError> {
             server::server::run_server()
         },
         cli::MarvelCommand::client => {
-            println!("Starting client...");
-            Ok(())
+            dbg!("Starting client...");
+            client::client::authenticate("userID1", "password1")
         },
 
     }

@@ -12,6 +12,15 @@ pub struct LoginPayload {
     pub  pwd: String,
 }
 
+impl LoginPayload {
+    pub fn encode_payload(&self) -> Vec<u8> {
+        let mut buf = Vec::new();
+        buf.reserve(self.encoded_len());
+        self.encode(&mut buf).unwrap();
+        buf
+    }
+}
+
 // pub fn build_payload() -> Result<security::LoginPayload, marvel_error::error::MarvelError> {
 //     let v = security::LoginPayload {
 //         userid: "user1".to_string(),

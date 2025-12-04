@@ -4,13 +4,14 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-tokio = { version = "1", features = ["full"] }
+tokio = { workspace = true, features = ["full"] }
 axum = "0"
 axum-extra = { version = "0", features = ["protobuf"] }
 tracing-subscriber = "0"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 log = "0"
-thiserror = "2"
+thiserror = { workspace = true }
 
 proto = { path = "../proto" }
+core = { path = "../core" }
