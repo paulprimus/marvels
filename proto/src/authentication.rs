@@ -7,9 +7,9 @@ use prost::Message;
 #[derive(Clone, PartialEq, Message)]
 pub struct LoginPayload {
     #[prost(string, tag="1")]
-    pub userid: String,
+    pub client_id: String,
     #[prost(string, tag="2")]
-    pub  pwd: String,
+    pub  client_secret: String,
 }
 
 impl LoginPayload {

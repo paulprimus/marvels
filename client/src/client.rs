@@ -6,7 +6,7 @@ use core::MarvelError;
 pub async fn authenticate(username: &str, password: &str) -> Result<(), MarvelError> {
     // Dummy authentication logic
     let payload = LoginPayload {
-        userid: username.to_string(),
+        client_id: username.to_string(),
         pwd: password.to_string(),
     };
 
