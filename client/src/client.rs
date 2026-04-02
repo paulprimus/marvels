@@ -7,7 +7,7 @@ pub async fn authenticate(username: &str, password: &str) -> Result<(), MarvelEr
     // Dummy authentication logic
     let payload = LoginPayload {
         client_id: username.to_string(),
-        pwd: password.to_string(),
+        client_secret: password.to_string(),
     };
 
     let data: Vec<u8> = payload.encode_payload();
