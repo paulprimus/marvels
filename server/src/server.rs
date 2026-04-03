@@ -7,7 +7,6 @@ use serde_json::{Value};
 use axum_extra::protobuf::Protobuf;
 use proto::authentication::LoginPayload;
 
-#[tokio::main]
 pub async fn run_server() -> Result<(), MarvelError> {
     tracing_subscriber::fmt::init();
 

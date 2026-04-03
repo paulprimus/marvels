@@ -7,9 +7,6 @@ pub enum MarvelError {
     NetworkError(String),
     #[error("Proto error occurred: {0}")]
     ProtoError(String),
-    #[error("#[form] io::Error")]
-    IOError(std::io::Error),
-    #[error("Reqwest Error: {0}")]
-    ReqwestError(#[from] reqwest::Error),
-
+    #[error("IO error occurred: {0}")]
+    IOError(String),
 }

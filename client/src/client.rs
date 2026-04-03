@@ -2,7 +2,6 @@ use proto::authentication::LoginPayload;
 use reqwest;
 use core::MarvelError;
 
-#[tokio::main]
 pub async fn authenticate(username: &str, password: &str) -> Result<(), MarvelError> {
     // Dummy authentication logic
     let payload = LoginPayload {
@@ -25,6 +24,6 @@ pub async fn authenticate(username: &str, password: &str) -> Result<(), MarvelEr
             dbg!(response);
             Ok(())
         }
-        Err(e) => Err(MarvelError::ReqwestError(e)),
+        Err(e) => Err(MarvelError::NetworkError(e.to_string())),
     };
 }
