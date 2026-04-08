@@ -5,7 +5,7 @@ use log::info;
 use serde::{Deserialize, Serialize};
 use serde_json::{Value};
 use axum_extra::protobuf::Protobuf;
-use proto::authentication::LoginPayload;
+use proto::authentication::security::LoginPayload;
 
 pub async fn run_server() -> Result<(), MarvelError> {
     tracing_subscriber::fmt::init();

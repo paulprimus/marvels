@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 prost = "0"
 prost-types = "0"
+core = { path = "../core" }
 
 [build-dependencies]
 prost-build = "0"
