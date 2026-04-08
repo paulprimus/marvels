@@ -1,11 +1,11 @@
-use axum::http::StatusCode;
-use axum::{routing::{get, post}, Json, Router};
-use axum_extra::protobuf::Protobuf;
 use core::MarvelError;
+use axum::{routing::{get, post}, Json, Router};
+use axum::http::StatusCode;
 use log::info;
-use proto::authentication::LoginPayload;
 use serde::{Deserialize, Serialize};
-use serde_json::Value;
+use serde_json::{Value};
+use axum_extra::protobuf::Protobuf;
+use proto::authentication::security::LoginPayload;
 
 pub async fn run_server() -> Result<(), MarvelError> {
     tracing_subscriber::fmt::init();
