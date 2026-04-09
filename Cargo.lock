@@ -997,7 +997,6 @@ dependencies = [
 name = "proto"
 version = "0.1.0"
 dependencies = [
- "core",
  "prost",
  "prost-build",
  "prost-types",
