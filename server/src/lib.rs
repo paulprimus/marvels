@@ -1,6 +1,6 @@
 pub mod server;
-mod authentication;
+pub mod authentication;
+pub mod token;
 
 pub use server::run_server;
-
 

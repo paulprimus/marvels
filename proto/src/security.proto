@@ -1,18 +1,90 @@
-
 syntax = "proto3";
 
 package security;
 
-message LoginPayload {
-  string userid = 1;
-  string pwd = 2;
+// AUTHENTICATION
+// Wer bist du? Identität des Clients prüfen (OAuth 2.1 Client Authentication)
+
+message AuthenticateRequest {
+  // Identifizierung des Clients (Applikation)
+  string client_id = 1;
+  string client_secret = 2;
+
+  // PKCE (RFC 7636) – Pflicht für public clients (authorization_code Grant)
+  // Beim Authorization-Request: BASE64URL(SHA256(code_verifier))
+  string code_challenge = 3;
+
+  string code_challenge_method = 4;
+  string code = 5;
+  string redirect_uri = 6;
+  // PKCE: beim Token-Request gesendeter Originalwert (43–128 Zeichen)
+  string code_verifier = 7;
 }
 
-message LoginResponse {
-    string status = 1;
+message AuthenticateResponse {
+  // Bestätigung der Identität (z.B. intern verwendetes Subject)
+  string subject = 1;
+  // Fehlermeldung falls Authentifizierung fehlschlägt (OAuth 2.1 error codes)
+  // z.B. "invalid_client" | "unauthorized_client"
+  string error = 2;
+  string error_description = 3;
 }
 
-service Authentication {
-    rpc LoginRequest (LoginPayload) returns (LoginResponse);
+// ─── AUTHORIZATION
+// Was darfst du? Access Token für Ressourcen ausstellen (OAuth 2.1 Token Endpoint)
+
+message AuthorizeRequest {
+  // OAuth 2.1: grant_type – Pflichtfeld
+  // Werte: "client_credentials" | "authorization_code" | "refresh_token"
+  string grant_type = 1;
+
+  // Client-Identität (muss vorher authentifiziert worden sein)
+  string client_id = 2;
+
+  // OAuth 2.1: Angeforderte Berechtigungen (leerzeichen-getrennt)
+  //   "read"            – Lesezugriff auf Ressourcen
+  //   "write"           – Schreibzugriff auf Ressourcen
+  string scope = 3;
+
+  // Refresh Token Grant (grant_type=refresh_token)
+  string refresh_token = 4;
+
+  // PKCE (RFC 7636): beim Token-Request gesendeter Originalwert
+  // Server prüft: BASE64URL(SHA256(code_verifier)) == gespeicherter code_challenge
+  string code_verifier = 5;
+
+  // Authorization Code (grant_type=authorization_code)
+  string code = 6;
+
+  // Redirect URI muss mit dem Authorization-Request übereinstimmen
+  string redirect_uri = 7;
 }
 
+message AuthorizeResponse {
+  // OAuth 2.1: ausgestelltes Access Token
+  string access_token = 1;
+  // Immer "Bearer" (RFC 6750)
+  string token_type = 2;
+  // Gültigkeitsdauer in Sekunden
+  int32 expires_in = 3;
+  // Refresh Token (nur wenn "offline_access" Scope gewährt wurde)
+  string refresh_token = 4;
+  // Tatsächlich gewährte Scopes (kann von angeforderten abweichen)
+  string scope = 5;
+  // Fehlermeldung (OAuth 2.1 error codes)
+  // z.B. "invalid_grant" | "invalid_scope" | "unauthorized_client"
+  string error = 6;
+  string error_description = 7;
+}
+
+// SERVICES
+
+service AuthenticationService {
+  // Prüft die Identität des Clients
+  rpc Authenticate (AuthenticateRequest) returns (AuthenticateResponse);
+}
+
+service AuthorizationService {
+  // Stellt Access Token basierend auf Grant Type aus
+  rpc Authorize (AuthorizeRequest) returns (AuthorizeResponse);
+}

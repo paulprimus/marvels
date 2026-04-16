@@ -1,11 +1,11 @@
-use client::run_authenticate;
+mod client;
 
 #[tokio::main]
 async fn main() {
     // TODO: Argumente per CLI einlesen (z.B. mit clap)
-    if let Err(e) = run_authenticate("userID1", "password1").await {
-        eprintln!("Client error: {e}");
-        std::process::exit(1);
+    let e = client::authenticate("userID1", "password1").await;
+    match e {
+        Ok(v) => println!("{}", v),
+        Err(e) => println!("Fehler: {}", e),
     }
 }
-

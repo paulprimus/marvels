@@ -21,7 +21,13 @@ pub mod security {
 //     }
 // }
 
-impl security::LoginPayload {
+impl security::AuthenticateRequest {
+    pub fn encode_payload(&self) -> Vec<u8> {
+        self.encode_to_vec()
+    }
+}
+
+impl security::AuthorizeRequest {
     pub fn encode_payload(&self) -> Vec<u8> {
         self.encode_to_vec()
     }
