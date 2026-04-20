@@ -18,7 +18,8 @@ sha2 = "0"
 base64 = "0"
 dashmap = "6"
 uuid = { version = "1", features = ["v4"] }
-jsonwebtoken = "10"
+jsonwebtoken = { version = "10" }
+rustls = { version = "0.23", features = ["ring"] }
 chrono = "0"
 
 proto = { path = "../proto" }

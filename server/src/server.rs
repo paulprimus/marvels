@@ -63,6 +63,7 @@ async fn authenticate(
 
     // Auth-Code generieren und zusammen mit code_challenge speichern
     let auth_code = Uuid::new_v4().to_string();
+    println!("auth_code: {}", auth_code);
     state.auth_codes.insert(auth_code.clone(), AuthCodeEntry {
         client_id: payload.client_id.clone(),
         code_challenge: payload.code_challenge.clone(),

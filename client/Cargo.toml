@@ -7,6 +7,7 @@ edition = "2024"
 [dependencies]
 tokio = { workspace = true, features = ["full"] }
 thiserror = { workspace = true }
+clap = { workspace = true }
 reqwest = "0"
 sha2 = "0"
 base64 = "0"

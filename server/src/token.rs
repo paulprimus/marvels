@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use core::MarvelError;
 
 /// Geheimer Schlüssel – in Produktion aus Umgebungsvariable laden!
-const JWT_SECRET: &[u8] = b"marvel-secret-key-XAX";
+const JWT_SECRET: &[u8] = b"$.$marvel-secret-key-XAX";
 
 /// JWT Claims (Payload)
 #[derive(Debug, Serialize, Deserialize)]
