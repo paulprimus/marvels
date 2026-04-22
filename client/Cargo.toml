@@ -16,3 +16,4 @@ rand = "0"
 
 proto = { path = "../proto" }
 core = { path = "../core" }
+prost = "0"

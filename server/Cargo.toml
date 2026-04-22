@@ -18,7 +18,7 @@ sha2 = "0"
 base64 = "0"
 dashmap = "6"
 uuid = { version = "1", features = ["v4"] }
-jsonwebtoken = { version = "10" }
+jsonwebtoken = { version = "10", features = ["rust_crypto"] }
 rustls = { version = "0.23", features = ["ring"] }
 chrono = "0"
 

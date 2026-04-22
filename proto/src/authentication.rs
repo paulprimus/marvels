@@ -1,3 +1,4 @@
+use std::fmt::Display;
 use prost::Message;
 pub mod security {
 
@@ -27,24 +28,27 @@ impl security::AuthenticateRequest {
     }
 }
 
+impl security::AuthenticateResponse {
+    pub fn decode_payload(bytes: impl AsRef<[u8]>) -> Result<Self, prost::DecodeError> {
+        Self::decode(bytes.as_ref())
+    }
+}
+
 impl security::AuthorizeRequest {
     pub fn encode_payload(&self) -> Vec<u8> {
         self.encode_to_vec()
     }
 }
 
-// pub fn build_payload() -> Result<security::LoginPayload, core::MarvelError> {
-//     let v = security::LoginPayload {
-//         userid: "user1".to_string(),
-//         pwd: "pass".to_string(),
-//     };
-//     Ok(v)
-// }
-//
-// pub fn serialize_payload(login_payload: &security::LoginPayload) -> Vec<u8> {
-//     let mut buf = Vec::new();
-//     buf.reserve(login_payload.encoded_len());
-//
-//     login_payload.encode(&mut buf).unwrap();
-//     buf
-// }
+impl security::AuthorizeResponse {
+    pub fn decode_payload(bytes: impl AsRef<[u8]>) -> Result<Self, prost::DecodeError> {
+        Self::decode(bytes.as_ref())
+    }
+}
+
+impl Display for security::AuthorizeRequest {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "AuthorizeRequest {{ grant_type: {}, client_id: {}, scope: {}, refresh_token: {}, code_verifier: {}, code: {}, redirect_uri: {} }}",
+            self.grant_type, self.client_id, self.scope, self.refresh_token, self.code_verifier, self.code, self.redirect_uri)
+    }
+}

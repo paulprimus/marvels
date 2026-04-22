@@ -90,6 +90,8 @@ async fn authorize(
     Protobuf(payload): Protobuf<AuthorizeRequest>,
 ) -> (StatusCode, Protobuf<AuthorizeResponse>) {
 
+    info!("Authorizing payload={}", payload);
+
     if payload.grant_type == "authorization_code" {
         // Auth-Code aus Cache holen (einmalig – danach löschen!)
         let entry = match state.auth_codes.remove(&payload.code) {

@@ -3,6 +3,7 @@ use rustls;
 #[tokio::main]
 async fn main() {
     // jsonwebtoken v10 benötigt einen explizit installierten CryptoProvider
+
     rustls::crypto::ring::default_provider()
         .install_default()
         .expect("CryptoProvider konnte nicht installiert werden");

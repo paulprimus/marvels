@@ -31,14 +31,17 @@ pub async fn authenticate(client_id: &str, client_secret: &str) -> Result<String
 
     match res {
         Ok(response) => {
-            dbg!(&response);
-
-            let auth_code = response
-                .text()
+            let bytes = response
+                .bytes()
                 .await
                 .map_err(|e| MarvelError::NetworkError(e.to_string()))?;
-            // Gibt "auth_code|code_verifier" zurück damit der Aufrufer beide Werte hat
-            Ok(format!("{auth_code} | {code_verifier}"))
+            let decoded = security::AuthenticateResponse::decode_payload(&bytes)
+                .map_err(|e| MarvelError::NetworkError(format!("Protobuf-Dekodierung fehlgeschlagen: {e}")))?;
+            if !decoded.error.is_empty() {
+                return Err(MarvelError::NetworkError(format!("{}: {}", decoded.error, decoded.error_description)));
+            }
+            // Gibt "auth_code | code_verifier" zurück damit der Aufrufer beide Werte hat
+            Ok(format!("{} | {}", decoded.subject, code_verifier))
         }
         Err(e) => Err(MarvelError::NetworkError(e.to_string())),
     }
@@ -69,11 +72,16 @@ pub async fn authorize(auth_code: &str, code_verifier: &str, client_id: &str, sc
 
     match res {
         Ok(response) => {
-            let access_token = response
-                .text()
+            let bytes = response
+                .bytes()
                 .await
                 .map_err(|e| MarvelError::NetworkError(e.to_string()))?;
-            Ok(access_token)
+            let decoded = security::AuthorizeResponse::decode_payload(&bytes)
+                .map_err(|e| MarvelError::NetworkError(format!("Protobuf-Dekodierung fehlgeschlagen: {e}")))?;
+            if !decoded.error.is_empty() {
+                return Err(MarvelError::NetworkError(format!("{}: {}", decoded.error, decoded.error_description)));
+            }
+            Ok(decoded.access_token)
         }
         Err(e) => Err(MarvelError::NetworkError(e.to_string())),
     }
