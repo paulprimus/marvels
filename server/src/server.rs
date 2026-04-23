@@ -230,9 +230,13 @@ pub async fn run_server() -> Result<(), MarvelError> {
         .route("/protected", get(protected))
         .with_state(state);
 
-    info!("Listening on http://0.0.0.0:3000");
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
+    let addr = "0.0.0.0:3000";
+    let listener = tokio::net::TcpListener::bind(addr)
+        .await
+        .map_err(|e| MarvelError::IOError(format!("TCP-Listener konnte nicht auf {addr} gebunden werden: {e}")))?;
+
+    info!("Listening on http://{addr}");
     axum::serve(listener, app)
         .await
-        .map_err(|_err| MarvelError::AxumError("Axum Server konnte nicht gestartet werden".to_string()))
+        .map_err(|e| MarvelError::AxumError(format!("Server-Fehler: {e}")))
 }
