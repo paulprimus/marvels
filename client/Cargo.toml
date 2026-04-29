@@ -3,16 +3,17 @@ name = "client"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "marvels_client"
+path = "src/lib.rs"
 
 [dependencies]
 tokio = { workspace = true, features = ["full"] }
 thiserror = { workspace = true }
-clap = { workspace = true }
 reqwest = "0"
 sha2 = "0"
 base64 = "0"
 rand = "0"
-
 
 proto = { path = "../proto" }
 core = { path = "../core" }
