@@ -51,7 +51,7 @@ impl MarvelsClient {
         client_id: &str,
         client_secret: &str,
     ) -> Result<AuthResult, MarvelError> {
-        info!("authenticating {client_id}");
+        // info!("authenticating {client_id}");
         let code_verifier = generate_code_verifier();
         let code_challenge = generate_code_challenge(&code_verifier);
 
