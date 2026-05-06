@@ -46,7 +46,12 @@ impl MarvelsClient {
     /// Schritt 1: Client-Identität prüfen, Authorization Code erhalten.
     ///
     /// Generiert intern PKCE code_verifier und code_challenge.
-    pub async fn authenticate(&self, client_id: &str, client_secret: &str) -> Result<AuthResult, MarvelError> {
+    pub async fn authenticate(
+        &self,
+        client_id: &str,
+        client_secret: &str,
+    ) -> Result<AuthResult, MarvelError> {
+        info!("authenticating {client_id}");
         let code_verifier = generate_code_verifier();
         let code_challenge = generate_code_challenge(&code_verifier);
 
@@ -62,7 +67,8 @@ impl MarvelsClient {
 
         let data = payload.encode_payload();
 
-        let res = self.http
+        let res = self
+            .http
             .post(format!("{}/authenticate", self.base_url))
             .header("Content-Type", "application/protobuf")
             .body(data)
@@ -75,10 +81,17 @@ impl MarvelsClient {
                     .bytes()
                     .await
                     .map_err(|e| MarvelError::NetworkError(e.to_string()))?;
-                let decoded = security::AuthenticateResponse::decode_payload(&bytes)
-                    .map_err(|e| MarvelError::NetworkError(format!("Protobuf-Dekodierung fehlgeschlagen: {e}")))?;
+                let decoded =
+                    security::AuthenticateResponse::decode_payload(&bytes).map_err(|e| {
+                        MarvelError::NetworkError(format!(
+                            "Protobuf-Dekodierung fehlgeschlagen: {e}"
+                        ))
+                    })?;
                 if !decoded.error.is_empty() {
-                    return Err(MarvelError::NetworkError(format!("{}: {}", decoded.error, decoded.error_description)));
+                    return Err(MarvelError::NetworkError(format!(
+                        "{}: {}",
+                        decoded.error, decoded.error_description
+                    )));
                 }
                 Ok(AuthResult {
                     auth_code: decoded.subject,
@@ -90,7 +103,13 @@ impl MarvelsClient {
     }
 
     /// Schritt 2: Authorization Code + Code-Verifier gegen Access Token eintauschen.
-    pub async fn authorize(&self, auth_code: &str, code_verifier: &str, client_id: &str, scope: &str) -> Result<String, MarvelError> {
+    pub async fn authorize(
+        &self,
+        auth_code: &str,
+        code_verifier: &str,
+        client_id: &str,
+        scope: &str,
+    ) -> Result<String, MarvelError> {
         let payload = security::AuthorizeRequest {
             grant_type: "authorization_code".to_string(),
             client_id: client_id.to_string(),
@@ -103,7 +122,8 @@ impl MarvelsClient {
 
         let data = payload.encode_payload();
 
-        let res = self.http
+        let res = self
+            .http
             .post(format!("{}/authorize", self.base_url))
             .header("Content-Type", "application/protobuf")
             .body(data)
@@ -116,10 +136,14 @@ impl MarvelsClient {
                     .bytes()
                     .await
                     .map_err(|e| MarvelError::NetworkError(e.to_string()))?;
-                let decoded = security::AuthorizeResponse::decode_payload(&bytes)
-                    .map_err(|e| MarvelError::NetworkError(format!("Protobuf-Dekodierung fehlgeschlagen: {e}")))?;
+                let decoded = security::AuthorizeResponse::decode_payload(&bytes).map_err(|e| {
+                    MarvelError::NetworkError(format!("Protobuf-Dekodierung fehlgeschlagen: {e}"))
+                })?;
                 if !decoded.error.is_empty() {
-                    return Err(MarvelError::NetworkError(format!("{}: {}", decoded.error, decoded.error_description)));
+                    return Err(MarvelError::NetworkError(format!(
+                        "{}: {}",
+                        decoded.error, decoded.error_description
+                    )));
                 }
                 Ok(decoded.access_token)
             }
@@ -129,7 +153,8 @@ impl MarvelsClient {
 
     /// Schritt 3: Geschützte Ressource mit Bearer Token aufrufen.
     pub async fn call_protected(&self, access_token: &str) -> Result<String, MarvelError> {
-        let res = self.http
+        let res = self
+            .http
             .get(format!("{}/protected", self.base_url))
             .header("Authorization", format!("Bearer {access_token}"))
             .send()
