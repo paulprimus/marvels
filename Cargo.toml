@@ -4,6 +4,7 @@ members = [
     "core",
     "proto",
     "server",
+    "example/client_exp",
 ]
 resolver = "2"
 
